@@ -44,19 +44,19 @@ export const HotelView: React.FC<HotelViewProps> = ({
             </Stack>
             <StarRating starRating={Number(hotel.starRating)} />
           </Flex>
-          {isLoadingRooms ? (
-            <Flex alignItems='center' justifyContent='center' py='4' w='full'>
-              <Spinner size='lg' />
-            </Flex>
-          ) : (
-            <Stack>
-              {filteredRooms.map(room => (
-                <RoomDetails key={room.id} room={room} />
-              ))}
-            </Stack>
-          )}
         </GridItem>
       </Grid>
+      {isLoadingRooms ? (
+        <Flex alignItems='center' justifyContent='center' py='4' w='full'>
+          <Spinner size='lg' />
+        </Flex>
+      ) : (
+        <Stack>
+          {filteredRooms.map(room => (
+            <RoomDetails key={room.id} room={room} />
+          ))}
+        </Stack>
+      )}
     </Stack>
   );
 };
