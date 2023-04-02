@@ -1,27 +1,19 @@
-import './App.css';
-
+import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
-import logo from './logo.svg';
+import { queryClientConfig } from './constants';
+import { HotelList } from './containers/hotel-list';
+
+const queryClient = new QueryClient(queryClientConfig);
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img alt="logo" className="App-logo" src={logo} />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider>
+        <HotelList />
+      </ChakraProvider>
+    </QueryClientProvider>
   );
 }
 
