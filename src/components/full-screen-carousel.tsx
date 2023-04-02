@@ -19,7 +19,7 @@ type FullScreenCarouselProps = {
 }
 
 export const FullScreenCarousel: React.FC<FullScreenCarouselProps> = ({ images, isOpen, onClose }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   const previousImage = () => {
     setCurrentImageIndex(

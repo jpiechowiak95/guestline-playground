@@ -10,7 +10,7 @@ type RoomDetailsProps = {
 export const RoomDetails: React.FC<RoomDetailsProps> = ({ room }) => {
   return (
     <Box borderColor='gray.700' borderTopWidth='1px' p='4'>
-      <Grid gap={4} templateColumns="minmax(150px, 25%) 1fr">
+      <Grid gap='4' templateColumns="minmax(150px, 25%) 1fr">
         <GridItem>
           <Stack spacing='1'>
             <Text fontSize='sm' fontWeight='600'>
