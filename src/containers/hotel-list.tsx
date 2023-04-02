@@ -1,4 +1,4 @@
-import { Container, Flex, HStack, Spinner, Stack } from '@chakra-ui/react';
+import { Container, Flex, HStack, Spinner, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
 import { useQuery } from 'react-query';
 
@@ -42,13 +42,17 @@ export const HotelList: React.FC = () => {
             />
           </HStack>
           <Stack spacing='6'>
-            {filteredHotels.map(hotel => (
-              <HotelView
-                hotel={hotel}
-                key={hotel.id}
-                roomsFilters={filters}
-              />
-            ))}
+            {filters.starRating > 0 || filters.children > 0 || filters.adults > 0 ? (
+              filteredHotels.map(hotel => (
+                <HotelView
+                  hotel={hotel}
+                  key={hotel.id}
+                  roomsFilters={filters}
+                />
+              ))
+            ) : (
+              <Text>No rooms available for selected filters.</Text>
+            )}
           </Stack>
         </Stack>
       )}

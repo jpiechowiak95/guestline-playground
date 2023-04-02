@@ -38,7 +38,9 @@ export const StarRating: React.FC<StarRatingProps> = ({ starRating = 0, onStarCl
           as={icon}
           boxSize='5'
           color='black'
+          data-testid={`star-icon-${icon === StarFilled ? 'filled' : 'outline'}`}
           key={i}
+          role='img'
           {...(onStarClick ? {
             onClick: () => onStarClick(i + 1),
             onMouseEnter: () => handleStarHover(i + 1),
