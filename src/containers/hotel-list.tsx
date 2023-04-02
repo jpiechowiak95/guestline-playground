@@ -1,20 +1,14 @@
-import { Container, Flex, Spinner, Stack } from '@chakra-ui/react';
+import { Container, Flex, HStack, Spinner, Stack } from '@chakra-ui/react';
 import React from 'react';
-import { useQueries, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 
 import { HotelsAPI } from '../api';
-import { HotelView } from '../components/hotel-view';
+import { HotelView, LabeledCounter, StarRating } from '../components';
+import { useHotelFilters } from '../hooks';
 
 export const HotelList: React.FC = () => {
   const { data: hotels = [], isLoading: isLoadingHotels } = useQuery('hotels', HotelsAPI.getAll);
-
-  const rooms = useQueries(
-    hotels.map(hotel => ({
-      queryKey: ['rooms', hotel.id],
-      queryFn: () => HotelsAPI.getRoomDetails(hotel.id),
-      enabled: !!hotel
-    }))
-  );
+  const { filters, setFilter, filteredHotels } = useHotelFilters(hotels);
 
   return (
     <Container maxW='2xl' py='8'>
@@ -23,14 +17,39 @@ export const HotelList: React.FC = () => {
           <Spinner size='lg' />
         </Flex>
       ) : (
-        <Stack spacing='6'>
-          {hotels.map((hotel, hotelIndex) => (
-            <HotelView
-              hotel={hotel}
-              key={hotel.id}
-              rooms={rooms[hotelIndex].data?.rooms ?? []}
+        <Stack alignItems='center' spacing='8'>
+          <HStack
+            borderColor='gray.700'
+            borderWidth='1px'
+            justifyContent='center'
+            p='2'
+            spacing='8'
+            w={{ base: 'full', md: '75%' }}
+          >
+            <StarRating
+              onStarClick={(stars) => setFilter('starRating', stars)}
+              starRating={filters.starRating}
             />
-          ))}
+            <LabeledCounter
+              label='Adults'
+              setValue={(value) => setFilter('adults', value)}
+              value={filters.adults}
+            />
+            <LabeledCounter
+              label='Children'
+              setValue={(value) => setFilter('children', value)}
+              value={filters.children}
+            />
+          </HStack>
+          <Stack spacing='6'>
+            {filteredHotels.map(hotel => (
+              <HotelView
+                hotel={hotel}
+                key={hotel.id}
+                roomsFilters={filters}
+              />
+            ))}
+          </Stack>
         </Stack>
       )}
     </Container>
