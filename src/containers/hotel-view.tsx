@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import { Hotel, HotelsAPI } from '../api';
 import { FullScreenCarousel, ImageThumbnail, RoomDetails, StarRating } from '../components';
 import { HotelFilters } from '../hooks';
+import { filterRooms } from '../utils';
 
 type HotelViewProps = {
   hotel: Hotel;
@@ -20,11 +21,11 @@ export const HotelView: React.FC<HotelViewProps> = ({
   const carouselModal = useDisclosure();
   const images = hotel.images.map(image => image.url);
 
-  const filteredRooms = data.rooms
-    .filter(r => children === 0 || r.occupancy.maxChildren >= children)
-    .filter(r => adults === 0 || r.occupancy.maxAdults >= adults);
+  const filteredRooms = filterRooms(data.rooms, { adults, children });
 
-  return (adults > 0 || children > 0) && filteredRooms.length === 0 ? null : (
+  const isFiltered = adults > 0 || children > 0;
+
+  return isFiltered && filteredRooms.length === 0 ? null : (
     <Stack borderColor='gray.700' borderWidth='1px'>
       <Grid gap={4} templateColumns='minmax(150px, 25%) 1fr'>
         <GridItem p='4'>

@@ -21,9 +21,9 @@ export const LabeledCounter: React.FC<LabeledCounterProps> = ({ label, value, se
   return (
     <HStack spacing='2'>
       <Text fontSize='xs' mr='1'>{label}:</Text>
-      <Button borderRadius='full' onClick={decrement} size='xs'>-</Button>
+      <Button borderRadius='full' data-testid='decrement-button' onClick={decrement} size='xs'>-</Button>
       <Text fontSize='xs'>{value}</Text>
-      <Button borderRadius='full' onClick={increment} size='xs'>+</Button>
+      <Button borderRadius='full' data-testid='increment-button' onClick={increment} size='xs'>+</Button>
     </HStack>
   );
 };

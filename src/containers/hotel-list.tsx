@@ -1,14 +1,26 @@
-import { Container, Flex, HStack, Spinner, Stack } from '@chakra-ui/react';
+import { Container, Flex, HStack, Spinner, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQueries, useQuery } from 'react-query';
 
 import { HotelsAPI } from '../api';
 import { HotelView, LabeledCounter, StarRating } from '../components';
 import { useHotelFilters } from '../hooks';
+import { filterRooms } from '../utils';
 
 export const HotelList: React.FC = () => {
   const { data: hotels = [], isLoading: isLoadingHotels } = useQuery('hotels', HotelsAPI.getAll);
-  const { filters, setFilter, filteredHotels } = useHotelFilters(hotels);
+  const { filters, setFilter, filteredHotels, isFiltered } = useHotelFilters(hotels);
+
+  const results = useQueries(filteredHotels.map(hotel =>
+    ({
+      queryKey: ['rooms', hotel.id],
+      queryFn: () => HotelsAPI.getRoomDetails(hotel.id)
+    })
+  ));
+
+  const totalFilteredRooms = results.reduce((sum, { data }) => {
+    return sum + (filterRooms(data?.rooms ?? [], filters).length);
+  }, 0);
 
   return (
     <Container maxW='2xl' py='8'>
@@ -42,13 +54,17 @@ export const HotelList: React.FC = () => {
             />
           </HStack>
           <Stack spacing='6'>
-            {filteredHotels.map(hotel => (
-              <HotelView
-                hotel={hotel}
-                key={hotel.id}
-                roomsFilters={filters}
-              />
-            ))}
+            {isFiltered && totalFilteredRooms === 0 ? (
+              <Text>No rooms available for selected filters</Text>
+            ) : (
+              filteredHotels.map(hotel => (
+                <HotelView
+                  hotel={hotel}
+                  key={hotel.id}
+                  roomsFilters={filters}
+                />
+              ))
+            )}
           </Stack>
         </Stack>
       )}

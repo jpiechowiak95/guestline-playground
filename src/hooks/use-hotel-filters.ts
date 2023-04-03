@@ -25,5 +25,7 @@ export const useHotelFilters = (hotels: Hotel[]) => {
 
   const filteredHotels = hotels.filter(h => !filters.starRating || Number(h.starRating) >= filters.starRating);
 
-  return { filters, setFilter, filteredHotels };
+  const isFiltered = filters.adults > 0 || filters.children > 0 || filters.starRating > 0;
+
+  return { filters, setFilter, filteredHotels, isFiltered };
 };
